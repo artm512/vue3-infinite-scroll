@@ -1,15 +1,19 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <Title apiName="DOG API" />
+  <ListInfinite />
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import HelloWorld from "./components/HelloWorld.vue";
+
+// components
+import Title from "./components/Title.vue";
+import ListInfinite from "./components/ListInfinite.vue";
 
 @Options({
   components: {
-    HelloWorld
+    Title,
+    ListInfinite
   }
 })
 export default class App extends Vue {}
