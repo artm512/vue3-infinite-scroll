@@ -3,17 +3,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, computed } from "vue";
+
+type Props = {
+  apiName: string;
+};
 
 export default defineComponent({
   name: "Title",
   props: {
     apiName: {
-      type: String
+      type: String,
+      required: true
     }
   },
-  setup(props) {
-    const title = `${props.apiName}' LIST`;
+  setup(props: Props) {
+    const title = computed(() => `${props.apiName}' LIST`);
 
     return { title };
   }
