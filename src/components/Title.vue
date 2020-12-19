@@ -18,7 +18,7 @@ export default defineComponent({
     }
   },
   setup(props: Props) {
-    const title = computed(() => `${props.apiName}' DEMO`);
+    const title = computed(() => `${props.apiName} DEMO`);
 
     return { title };
   }
