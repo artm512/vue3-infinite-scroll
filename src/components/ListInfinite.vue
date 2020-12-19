@@ -1,6 +1,6 @@
 <template>
   <ul class="flex flex-wrap" :class="$style.list">
-    <li v-for="dog in state.dogData" :key="dog.url" :class="$style.card">
+    <li v-for="dog in state.dogData" :key="dog.id" :class="$style.card">
       <div :class="$style.card__picture">
         <img :src="dog.url" :alt="dog.dogBreed" />
       </div>
