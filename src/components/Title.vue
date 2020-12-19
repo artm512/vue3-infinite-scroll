@@ -31,6 +31,7 @@ export default defineComponent({
 .title {
   font-family: "Indie Flower", cursive;
   font-size: 36px;
+  margin-bottom: 20px;
   min-width: 960px;
   text-align: center;
 }

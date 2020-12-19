@@ -1,8 +1,10 @@
 <template>
   <ul class="flex flex-wrap" :class="$style.list">
     <li v-for="dog in state.dogData" :key="dog.url" :class="$style.card">
-      <span :class="$style.dogBreed">{{ dog.dogBreed }}</span>
-      <img :src="dog.url" :alt="dog.dogBreed" />
+      <div :class="$style.card__picture">
+        <img :src="dog.url" :alt="dog.dogBreed" />
+      </div>
+      <span :class="$style.card__dogBreed">{{ dog.dogBreed }}</span>
     </li>
   </ul>
   <div v-if="loading" :class="$style.loader">Loading...</div>
@@ -55,7 +57,6 @@ export default defineComponent({
 
     const init = () => {
       setData();
-      console.log(state.dogData);
     };
 
     init();
@@ -79,6 +80,10 @@ $listGap: 20px;
 }
 
 .card {
+  border-radius: 3px;
+  box-shadow: 0px 8px 16px -2px rgba(10, 10, 10, 0.1),
+    0px 0px 0px 1px rgba(10, 10, 10, 0.02);
+  padding: 10px;
   width: ($listWidth - $listGap * 4) / 3;
 
   &:not(:nth-of-type(3n + 1)) {
@@ -92,6 +97,27 @@ $listGap: 20px;
   img {
     width: 100%;
   }
+}
+
+.card__picture {
+  align-items: center;
+  background: rgba(#000000, 0.1);
+  display: flex;
+  height: 200px;
+  justify-content: center;
+  margin-bottom: 10px;
+
+  & > img {
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+  }
+}
+
+.card__dogBreed {
+  font-family: "Indie Flower", cursive;
+  font-size: 20px;
 }
 
 // ローディングアイコン

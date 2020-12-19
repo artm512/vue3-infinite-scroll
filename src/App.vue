@@ -21,6 +21,7 @@ export default class App extends Vue {}
 
 <style lang="scss">
 @import "./assets/styles/normalize.scss";
+@import url("https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap");
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
