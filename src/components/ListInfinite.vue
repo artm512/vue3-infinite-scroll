@@ -118,10 +118,6 @@ $listGap: 20px;
   &:nth-of-type(n + 4) {
     margin-top: $listGap;
   }
-
-  img {
-    width: 100%;
-  }
 }
 
 .card__picture {
