@@ -1,5 +1,5 @@
 <template>
-  <ul :class="$style.list">
+  <ul class="flex flex-wrap" :class="$style.list">
     <li v-for="dog in state.dogData" :key="dog.url" :class="$style.card">
       <span :class="$style.dogBreed">{{ dog.dogBreed }}</span>
       <img :src="dog.url" :alt="dog.dogBreed" />
@@ -70,8 +70,8 @@ $listGap: 20px;
 
 .list {
   box-sizing: border-box;
-  display: flex;
-  flex-wrap: wrap;
+  // display: flex; // 試しにtailwind置き換え
+  // flex-wrap: wrap; // 試しにtailwind置き換え
   list-style-type: none;
   margin: 0 auto $listGap;
   padding: 0 $listGap;
