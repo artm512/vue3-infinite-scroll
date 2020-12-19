@@ -60,12 +60,11 @@ $listWidth: 960px;
 $listGap: 20px;
 
 .list {
-  background: rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
   list-style-type: none;
-  margin: auto;
+  margin: 0 auto $listGap;
   padding: 0 $listGap;
   width: $listWidth;
 }
