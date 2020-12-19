@@ -16,18 +16,11 @@ import { defineComponent, ref, reactive, onMounted } from "vue";
 import axios, { AxiosResponse } from "axios";
 import { v4 as uuidv4 } from "uuid";
 
+import { dogDataType } from "../types/dogData";
+
 export default defineComponent({
   name: "ListInfinite",
   setup() {
-    /**
-     * type
-     */
-    type dogDataType = {
-      id: string;
-      dogBreed?: string;
-      url: string;
-    };
-
     /**
      * state
      */
