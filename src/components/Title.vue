@@ -25,11 +25,12 @@ export default defineComponent({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style module lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap");
 
 .title {
   font-family: "Indie Flower", cursive;
+  min-width: 960px;
+  text-align: center;
 }
 </style>

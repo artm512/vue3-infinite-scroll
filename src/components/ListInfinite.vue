@@ -1,6 +1,6 @@
 <template>
   <ul :class="$style.list">
-    <li v-for="dog in dogData" :key="dog.url">
+    <li v-for="dog in dogData" :key="dog.url" :class="$style.card">
       <span :class="$style.breed">{{ dog.breed }}</span>
       <img :src="dog.url" :alt="dog.breed" />
     </li>
@@ -56,8 +56,34 @@ export default defineComponent({
 </script>
 
 <style module lang="scss">
+$listWidth: 960px;
+$listGap: 20px;
+
 .list {
   background: rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  list-style-type: none;
+  margin: auto;
+  padding: 0 $listGap;
+  width: $listWidth;
+}
+
+.card {
+  width: ($listWidth - $listGap * 4) / 3;
+
+  &:not(:nth-of-type(3n + 1)) {
+    margin-left: $listGap;
+  }
+
+  &:nth-of-type(n + 4) {
+    margin-top: $listGap;
+  }
+
+  img {
+    width: 100%;
+  }
 }
 
 // ローディングアイコン
