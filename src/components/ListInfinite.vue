@@ -7,60 +7,89 @@
       <span :class="$style.card__dogBreed">{{ dog.dogBreed }}</span>
     </li>
   </ul>
+  <div ref="refsObserveElement"></div>
   <div v-if="loading" :class="$style.loader">Loading...</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive } from "vue";
-import axios from "axios";
+import { defineComponent, ref, reactive, onMounted } from "vue";
+import axios, { AxiosResponse } from "axios";
 import { v4 as uuidv4 } from "uuid";
 
 export default defineComponent({
   name: "ListInfinite",
   setup() {
+    /**
+     * type
+     */
     type dogDataType = {
       id: string;
       dogBreed?: string;
       url: string;
     };
 
-    const loading = ref(false);
+    /**
+     * state
+     */
+    const loading = ref<boolean>(false);
+    const complateRendering = ref<boolean>(false);
+    const refsObserveElement = ref<HTMLImageElement | undefined>();
     const state = reactive<{ dogData: Array<dogDataType> }>({
       dogData: []
     });
 
-    const fetchGetData = (url: string) => {
+    /**
+     * set dog's data
+     */
+    const setData = (response: AxiosResponse) => {
+      response.data.message.map((url: string) => {
+        const breedName = url.match(
+          /https:\/\/images\.dog\.ceo\/breeds\/(\w+-?\w+)\/.+/
+        );
+        state.dogData.push({
+          id: uuidv4(),
+          dogBreed: breedName?.[1],
+          url
+        });
+      });
+    };
+
+    /**
+     * fetch dog's data
+     */
+    const fetchGetData = () => {
       loading.value = true;
+      complateRendering.value = false;
       axios
-        .get(url)
+        .get("https://dog.ceo/api/breeds/image/random/10")
         .then(response => {
-          response.data.message.map((url: string) => {
-            const breedName = url.match(
-              /https:\/\/images\.dog\.ceo\/breeds\/(\w+-?\w+)\/.+/
-            );
-            state.dogData.push({
-              id: uuidv4(),
-              dogBreed: breedName?.[1],
-              url
-            });
-          });
+          setData(response);
         })
         .catch(error => console.log(error))
         .finally(() => {
           loading.value = false;
+          complateRendering.value = true;
         });
     };
 
-    const setData = async () => {
-      await fetchGetData("https://dog.ceo/api/breeds/image/random/10");
+    const init = () => {
+      fetchGetData();
     };
 
-    const init = () => {
-      setData();
-    };
+    onMounted(() => {
+      const observer = new IntersectionObserver(entries => {
+        const entry = entries[0];
+        if (entry && entry.isIntersecting) {
+          if (!complateRendering.value) return; // 読み込みが終わっていない場合
+          fetchGetData();
+        }
+      });
+      const observeElement = refsObserveElement.value;
+      if (observeElement) observer.observe(observeElement);
+    });
 
     init();
-    return { state, loading };
+    return { state, loading, complateRendering, refsObserveElement };
   }
 });
 </script>
