@@ -1,8 +1,8 @@
 <template>
   <ul :class="$style.list">
-    <li v-for="dog in dogData" :key="dog.url" :class="$style.card">
-      <span :class="$style.breed">{{ dog.breed }}</span>
-      <img :src="dog.url" :alt="dog.breed" />
+    <li v-for="dog in state.dogData" :key="dog.url" :class="$style.card">
+      <span :class="$style.dogBreed">{{ dog.dogBreed }}</span>
+      <img :src="dog.url" :alt="dog.dogBreed" />
     </li>
   </ul>
   <div v-if="loading" :class="$style.loader">Loading...</div>
@@ -16,8 +16,16 @@ import { v4 as uuidv4 } from "uuid";
 export default defineComponent({
   name: "ListInfinite",
   setup() {
+    type dogDataType = {
+      id: string;
+      dogBreed?: string;
+      url: string;
+    };
+
     const loading = ref(false);
-    const dogData = reactive([{}]);
+    const state = reactive<{ dogData: Array<dogDataType> }>({
+      dogData: []
+    });
 
     const fetchGetData = (url: string) => {
       loading.value = true;
@@ -25,12 +33,12 @@ export default defineComponent({
         .get(url)
         .then(response => {
           response.data.message.map((url: string) => {
-            const breed = url.match(
+            const breedName = url.match(
               /https:\/\/images\.dog\.ceo\/breeds\/(\w+-?\w+)\/.+/
             );
-            dogData.push({
+            state.dogData.push({
               id: uuidv4(),
-              breed: breed?.[1],
+              dogBreed: breedName?.[1],
               url
             });
           });
@@ -47,10 +55,11 @@ export default defineComponent({
 
     const init = () => {
       setData();
+      console.log(state.dogData);
     };
 
     init();
-    return { dogData, loading };
+    return { state, loading };
   }
 });
 </script>
