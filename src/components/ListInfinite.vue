@@ -8,7 +8,7 @@
     </li>
   </ul>
   <div ref="refsObserveElement"></div>
-  <div v-if="loading" :class="$style.loader">Loading...</div>
+  <div v-show="loading" :class="$style.loader">Loading...</div>
 </template>
 
 <script lang="ts">
@@ -16,7 +16,7 @@ import { defineComponent, ref, reactive, onMounted } from "vue";
 import axios, { AxiosResponse } from "axios";
 import { v4 as uuidv4 } from "uuid";
 
-import { dogDataType } from "../types/dogData";
+import { DogDataType } from "../types/dogData";
 
 export default defineComponent({
   name: "ListInfinite",
@@ -27,15 +27,18 @@ export default defineComponent({
     const loading = ref<boolean>(false);
     const complateRendering = ref<boolean>(false);
     const refsObserveElement = ref<HTMLImageElement | undefined>(); // スクロール監視用
-    const state = reactive<{ dogData: Array<dogDataType> }>({
+    const state = reactive<{ dogData: Array<DogDataType> }>({
       dogData: []
     });
 
     /**
      * set dog's data
      */
+    // TODO: AxiosResponse を使う際、ジェネリクスでdataの型を指定してあげたほうが良いかも
     const setData = (response: AxiosResponse) => {
+      // TODO: mapの使い方ちょっとおかしい → forEachの方が良い
       response.data.message.map((url: string) => {
+        // TODO: 正規表現は外で定義したほうが良いかも
         const breedName = url.match(
           /https:\/\/images\.dog\.ceo\/breeds\/(\w+-?\w+)\/.+/
         );
@@ -56,12 +59,14 @@ export default defineComponent({
     const fetchGetData = () => {
       loading.value = true;
       complateRendering.value = false;
+      // TODO: 戻り値が AxiosResponse<any> 担っているため、戻り値に型をつける
+      // axios.get<BypeName>(URL)
       axios
         .get("https://dog.ceo/api/breeds/image/random/10")
         .then(response => {
           setData(response);
         })
-        .catch(error => console.log(error))
+        .catch(error => console.error(error))
         .finally(() => {
           loading.value = false;
           complateRendering.value = true;
@@ -74,11 +79,16 @@ export default defineComponent({
 
     onMounted(() => {
       const observer = new IntersectionObserver(entries => {
-        const entry = entries[0];
+        const [entry] = entries; // 学習memo: 配列の分割代入
         if (entry && entry.isIntersecting) {
           if (!complateRendering.value) return; // 読み込みが終わっていない場合
           fetchGetData();
         }
+        // ↓こっちでやりたい感だが、最初に2回API叩かれてしまう
+        // const isNotLoaded =
+        //   entry && entry.isIntersecting && !complateRendering.value;
+        // if (isNotLoaded) return;
+        // fetchGetData();
       });
       const observeElement = refsObserveElement.value;
       if (observeElement) observer.observe(observeElement);

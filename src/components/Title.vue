@@ -5,6 +5,7 @@
 <script lang="ts">
 import { defineComponent, computed } from "vue";
 
+// TODO: 2重で型定義しないといけない？？？
 type Props = {
   apiName: string;
 };
